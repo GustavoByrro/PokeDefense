@@ -1,8 +1,5 @@
 $(function () {
 
-    /* =========================================================
-       CONFIGURAÇÕES
-       ========================================================= */
     const TAM = 120;                 // tamanho do pokémon na tela (px)
     const METADE = TAM / 2;
     const VIDA_MAXIMA = 100;
@@ -19,9 +16,7 @@ $(function () {
         { nome: 'Dragonite', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' }
     ];
 
-    /* =========================================================
-       ESTADO
-       ========================================================= */
+    
     let telaAtual = 'inicial';
     let telaAnterior = 'inicial';
     let transicionando = false;
@@ -44,9 +39,7 @@ $(function () {
     const $arena = $('#arena');
     const $pontuacao = $('#pontuacao');
 
-    /* =========================================================
-       TELAS
-       ========================================================= */
+  
     function mostrarTela(id) {
         $('.tela').hide();
         $('#' + id).show();
@@ -92,9 +85,6 @@ $(function () {
         else mudarTela('inicial');
     }
 
-    /* =========================================================
-       JOGO
-       ========================================================= */
     function iniciarNovoJogo() {
         $arena.find('.pokemon, .bola, .flutua').remove();
 
