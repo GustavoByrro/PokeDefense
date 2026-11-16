@@ -1,6 +1,8 @@
+html, body { height: 100%; }
+
 body {
     margin: 0;
-    height: 100%;
+    overflow: hidden;
     font-family: "Press Start 2P", "Courier New", monospace;
     color: #2b1a4a;
     background-color: #63b3f7;
@@ -14,30 +16,33 @@ body {
 .tela {
     display: none;
     position: relative;
-    height: 85.6%;
+    height: 100vh;
+    box-sizing: border-box;
     padding: 80px 20px 20px;
     text-align: center;
+    overflow: hidden;
 }
 
 #inicial { display: block; }
+#ranking, #tutorial { overflow-y: auto; }
 
 .titulo {
     margin: 20px 0 50px;
     font-size: 80px;
     line-height: 1.2;
     color: #ffcd01;
+    font-family: 'Pokemon Solid', sans-serif;
     text-shadow:
         4px 4px 0 #3660AD,
         -3px -3px 0 #1f2a6b, 3px -3px 0 #1f2a6b,
         -3px 3px 0 #1f2a6b, 3px 3px 0 #1f2a6b,
         6px 8px 0 rgba(0, 0, 0, 0.35);
-        font-family: 'Pokemon Solid', sans-serif;
 }
+
 
 .botao,
 .pause,
-.voltar,
-.adicionar {
+.voltar {
     font-family: inherit;
     color: indigo;
     cursor: pointer;
@@ -48,16 +53,15 @@ body {
 
 .botao:hover,
 .pause:hover,
-.voltar:hover,
-.adicionar:hover { background-color: #fff2a8; }
+.voltar:hover { background-color: #fff2a8; }
 
 .botao:active,
 .pause:active,
-.voltar:active,
-.adicionar:active {
+.voltar:active {
     transform: translateY(4px);
     box-shadow: 0 2px 0 #8b5a2b;
 }
+
 .botao {
     display: flex;
     justify-content: center;
@@ -73,6 +77,7 @@ body {
 .voltar {
     position: absolute;
     top: 15px;
+    z-index: 30;
     padding: 10px 16px;
     font-size: 20px;
     border-radius: 10px;
@@ -80,36 +85,16 @@ body {
 .pause { right: 15px; }
 .voltar { left: 15px; }
 
-.adicionar {
-    display: block;
-    margin: 30px auto;
-    padding: 16px 28px;
-    font-size: 24px;
-    border-radius: 12px;
-}
-#pontuacao {
-    display: inline-block;
-    margin: 0;
-    height: 40px;
-    min-width: 40px;
-    padding: 12px 24px;
-    font-size: 36px;
-    color: white;
-    text-shadow: 3px 3px 0 #1f2a6b;
-    background-color: rgba(31, 42, 107, 0.75);
-    border: 4px solid white;
-    border-radius: 12px;
-}
-
 #ranking h2,
-#tutorial h2 {
+#tutorial h2,
+#resultado h2 {
     font-size: 32px;
     color: white;
     text-shadow: 3px 3px 0 #1f2a6b;
 }
 
-#ranking p, #ranking ol, #ranking ul, #ranking table,
-#tutorial p, #tutorial ol, #tutorial ul {
+
+#tutorial p, #tutorial ul {
     max-width: 700px;
     margin: 15px auto;
     padding: 18px 24px;
@@ -120,21 +105,223 @@ body {
     border: 4px solid saddlebrown;
     border-radius: 12px;
 }
-#ranking table { width: 100%; max-width: 700px; text-align: center; }
-#ranking ol, #ranking ul, #tutorial ol, #tutorial ul { padding-left: 50px; }
+#tutorial ul { padding-left: 50px; }
+
+
+.tabela-wrap {
+    max-width: 700px;
+    max-height: 65vh;
+    margin: 20px auto;
+    overflow-y: auto;
+    background-color: rgba(255, 250, 220, 0.95);
+    border: 4px solid saddlebrown;
+    border-radius: 12px;
+    box-shadow: 0 6px 0 #8b5a2b;
+}
+
+#tabela-ranking {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+#tabela-ranking th {
+    position: sticky;
+    top: 0;
+    padding: 16px 10px;
+    color: #ffcd01;
+    text-shadow: 2px 2px 0 #1f2a6b;
+    background-color: #3660AD;
+    border-bottom: 4px solid #1f2a6b;
+}
+
+#tabela-ranking td {
+    padding: 14px 10px;
+    border-bottom: 2px dashed rgba(139, 69, 19, 0.35);
+}
+
+#tabela-ranking tbody tr:nth-child(even) { background-color: rgba(250, 230, 120, 0.35); }
+#tabela-ranking tbody tr:hover { background-color: rgba(255, 205, 1, 0.45); }
+
+#tabela-ranking td:nth-child(1) { width: 18%; }
+#tabela-ranking td:nth-child(2) { text-align: left; padding-left: 20px; word-break: break-word; }
+#tabela-ranking td:nth-child(3) { width: 28%; color: #b3261e; }
+
+#tabela-ranking tr.ouro td    { background-color: #ffe066; font-weight: bold; }
+#tabela-ranking tr.prata td   { background-color: #dfe4ea; }
+#tabela-ranking tr.bronze td  { background-color: #e8b98a; }
+#tabela-ranking td.vazio { padding: 30px; color: #6b5a8a; }
+
+
+#resultado #nome {
+    display: block;
+    width: 560px;
+    max-width: 85%;
+    box-sizing: border-box;
+    margin: 30px auto 10px;
+    padding: 18px 14px;
+    font-family: inherit;
+    font-size: 22px;
+    text-align: center;
+    color: #2b1a4a;
+    background-color: #fffadc;
+    border: 4px solid saddlebrown;
+    border-radius: 12px;
+    outline: none;
+}
+#resultado #nome:focus { border-color: #3660AD; }
 
 #pausa {
     padding-top: 120px;
     background-color: rgba(0, 0, 40, 0.55);
 }
 
+#hud {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+#pontuacao {
+    display: inline-block;
+    margin: 0;
+    padding: 12px 24px;
+    min-width: 40px;
+    font-size: 36px;
+    line-height: 1;
+    color: white;
+    text-shadow: 3px 3px 0 #1f2a6b;
+    background-color: rgba(31, 42, 107, 0.75);
+    border: 4px solid white;
+    border-radius: 12px;
+}
+
+#barra-vida {
+    position: relative;
+    width: 320px;
+    max-width: 80vw;
+    height: 28px;
+    overflow: hidden;
+    background-color: rgba(31, 42, 107, 0.75);
+    border: 4px solid white;
+    border-radius: 10px;
+}
+
+#vida-preenchimento {
+    height: 100%;
+    width: 100%;
+    background-color: #4cd964;
+    transition: width 0.25s, background-color 0.25s;
+}
+#vida-preenchimento.medio { background-color: #ffcc00; }
+#vida-preenchimento.baixo { background-color: #ff3b30; }
+
+#vida-texto {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: white;
+    text-shadow: 2px 2px 0 #1f2a6b;
+}
+
+#arena {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+#jogador {
+    position: absolute;
+    left: 50%;
+    top: 80%;
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+    box-sizing: border-box;
+    background-color: #e63946;
+    border: 4px solid #1f2a6b;
+    border-radius: 8px;
+    box-shadow: inset -6px -6px 0 rgba(0, 0, 0, 0.25), 0 8px 0 rgba(0, 0, 0, 0.25);
+    z-index: 900;
+}
+#jogador.dano { animation: piscar 0.3s steps(2) 2; }
+
+@keyframes piscar {
+    0%   { background-color: #fff; }
+    100% { background-color: #e63946; }
+}
+
+.pokemon {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+}
+.pokemon .corpo { width: 100%; height: 100%; animation: andar 0.35s steps(2) infinite; }
+.pokemon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+.pokemon img.vira { transform: scaleX(-1); }
+
+.pokemon .hp {
+    position: absolute;
+    top: -6px;
+    left: 20%;
+    width: 60%;
+    height: 8px;
+    background-color: #333;
+    border: 2px solid white;
+}
+.pokemon .hp i { display: block; height: 100%; background-color: #ff4d4d; }
+
+.pokemon.capturado .corpo { animation: capturar 0.4s ease-in forwards; }
+
+@keyframes andar    { 0% { transform: translateY(0); } 100% { transform: translateY(-6px); } }
+@keyframes capturar { 100% { transform: scale(0) rotate(360deg); opacity: 0; } }
+
+.bola {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    background: url(../imgs/imgPokebolaIcone.png) center / contain no-repeat;
+    z-index: 850;
+    animation: girar 0.4s linear infinite;
+}
+.bola.esq { animation-direction: reverse; }
+
+@keyframes girar { 100% { transform: rotate(360deg); } }
+
+.flutua {
+    position: absolute;
+    z-index: 950;
+    font-size: 18px;
+    color: #ffcd01;
+    text-shadow: 3px 3px 0 #1f2a6b;
+    animation: subir 0.8s ease-out forwards;
+}
+@keyframes subir { 100% { transform: translateY(-60px); opacity: 0; } }
+
 @media (max-width: 600px) {
     .tela { padding-top: 70px; }
     .titulo { font-size: 34px; margin-bottom: 30px; }
     .botao { font-size: 18px; }
     #pontuacao { font-size: 24px; }
-    #ranking h2, #tutorial h2 { font-size: 22px; }
-    #ranking p, #ranking ol, #ranking ul, #tutorial p, #tutorial ol, #tutorial ul { font-size: 13px; }
+    #ranking h2, #tutorial h2, #resultado h2 { font-size: 22px; }
+    #tutorial p, #tutorial ul { font-size: 13px; }
+    #tabela-ranking { font-size: 12px; }
+    .pokemon { transform-origin: center; }
 }
 
 .transicao-metade {
@@ -149,64 +336,25 @@ body {
 }
 
 .transicao-metade.topo {
-    background-color: #dd0000;
+    background-color: #cc0000;
     clip-path: polygon(0 0, 100% 0, 100% 40%, 0 80%);
 }
 
 .transicao-metade.baixo {
     background-color: #f0f0f0;
     clip-path: polygon(0 80%, 100% 40%, 100% 100%, 0 100%);
-    border-top: 6px solid #222; 
+    border-top: 6px solid #222;
 }
 
-
-.animar-topo {
-    animation: abrirTopo 1.3s ease-in-out forwards;
-}
-
-.animar-baixo {
-    animation: abrirBaixo 1.3s ease-in-out forwards;
-}
+.animar-topo  { animation: abrirTopo 0.7s ease-in-out forwards; }
+.animar-baixo { animation: abrirBaixo 0.7s ease-in-out forwards; }
 
 @keyframes abrirTopo {
-    0% {
-        opacity: 1;
-        transform: translate(0, 0);
-    }
-    100% {
-        opacity: 1;
-        transform: translate(-1000px, -1000px);
-    }
+    0%   { opacity: 1; transform: translate(0, 0); }
+    100% { opacity: 1; transform: translate(-120vw, -120vh); }
 }
 
 @keyframes abrirBaixo {
-    0% {
-        opacity: 1;
-        transform: translate(0, 0);
-    }
-    100% {
-        opacity: 1;
-        transform: translate(1000px, 1000px);
-    }
-}
-
-.pokemon-spawn {
-    position: absolute;
-    bottom: 100px;
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    transition: transform 3s linear;
-}
-
-.spawn-esquerda {
-    left: 0px;
-}
-
-.spawn-direita {
-    right: 0px;
-}
-
-#lista-ranking{
-    background-color: #ffcd01;
+    0%   { opacity: 1; transform: translate(0, 0); }
+    100% { opacity: 1; transform: translate(120vw, 120vh); }
 }
