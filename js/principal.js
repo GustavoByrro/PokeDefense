@@ -34,13 +34,10 @@ const listaPokemons = [
         vida: 2,
         srcImg: 'imgs/rhydon.png'
     },
-    {
-        nome: 'Rhydom',
-        vida: 2,
-        srcImg: 'imgs/rhydon.png'
-    },
 
 ];
+
+let vidaJogador = 3;
 
 function mudarTela(telaDesejada) {
     let secoes = document.querySelectorAll('.tela');
@@ -72,7 +69,7 @@ function mudarTela(telaDesejada) {
                 document.getElementById(telaDesejada).style.display = 'block';
             }, 100);
         
-            return;
+        return;
     }
 
     secoes.forEach(secao =>  {
@@ -100,6 +97,8 @@ function iniciarNovoJogo() {
     if(intervaloJogo) clearInterval(intervaloJogo);
 
     intervaloJogo = setInterval(sortearE_DeslizarPokemon, 1000);
+
+    vidaJogador = 3;
 }
 
 function sortearE_DeslizarPokemon() {
@@ -134,7 +133,10 @@ function sortearE_DeslizarPokemon() {
 
     setTimeout(() => {
         img.remove();
-    }, 3500);
+    }, 3000);
+
+    if(vidaJogador === 0)
+        mudarTela('resultado');
 }
 
 function retomarJogo() {
@@ -145,6 +147,7 @@ function retomarJogo() {
 function aumentarPontos() {
     pontos += 1;
     contador.textContent = pontos;
+    vidaJogador -= 1;
 }
 
 document.addEventListener('keydown', function(e){
@@ -204,6 +207,7 @@ function salvarPontuacao() {
     document.querySelector("#nome").value = "";
     atualizarRanking();
     mudarTela("inicial");
+    vidaJogador = 3;
 }
 
 function atualizarRanking() {
@@ -214,7 +218,7 @@ function atualizarRanking() {
 
     for (let i = 0; i < jogadores.length; i++) {
         let item = document.createElement("li");
-        item.textContent = `${i + 1}º - ${jogadores[i].nome} - ${jogadores[i].pontos} pontos`;
+        item.textContent = `${jogadores[i].nome} - ${jogadores[i].pontos.value} pontos`;
         lista.appendChild(item);
     }
 }
