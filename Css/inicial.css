@@ -24,7 +24,7 @@ body {
 }
 
 #inicial { display: block; }
-#ranking, #tutorial { overflow-y: auto; }
+#ranking, #tutorial, #creditos { overflow-y: auto; }
 
 .titulo {
     margin: 20px 0 50px;
@@ -42,7 +42,8 @@ body {
 
 .botao,
 .pause,
-.voltar {
+.voltar,
+.btn-creditos {
     font-family: inherit;
     color: indigo;
     cursor: pointer;
@@ -53,11 +54,13 @@ body {
 
 .botao:hover,
 .pause:hover,
-.voltar:hover { background-color: #fff2a8; }
+.voltar:hover,
+.btn-creditos:hover { background-color: #fff2a8; }
 
 .botao:active,
 .pause:active,
-.voltar:active {
+.voltar:active,
+.btn-creditos:active {
     transform: translateY(4px);
     box-shadow: 0 2px 0 #8b5a2b;
 }
@@ -87,6 +90,7 @@ body {
 
 #ranking h2,
 #tutorial h2,
+#creditos h2,
 #resultado h2 {
     font-size: 32px;
     color: white;
@@ -170,6 +174,44 @@ body {
     outline: none;
 }
 #resultado #nome:focus { border-color: #3660AD; }
+
+/* Créditos: botão pequeno no canto da tela inicial + painel */
+.btn-creditos {
+    position: absolute;
+    right: 15px;
+    bottom: 20px;
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.painel-creditos {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px 24px;
+    line-height: 1.8;
+    background-color: rgba(255, 250, 220, 0.92);
+    border: 4px solid saddlebrown;
+    border-radius: 12px;
+    box-shadow: 0 6px 0 #8b5a2b;
+}
+.painel-creditos h3 {
+    margin: 20px 0 8px;
+    font-size: 18px;
+    color: #3660AD;
+}
+.painel-creditos h3:first-child { margin-top: 0; }
+.painel-creditos ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 16px;
+}
+.painel-creditos p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+}
 
 #pausa {
     padding-top: 120px;
@@ -320,6 +362,11 @@ body {
     #pontuacao { font-size: 24px; }
     #ranking h2, #tutorial h2, #resultado h2 { font-size: 22px; }
     #tutorial p, #tutorial ul { font-size: 13px; }
+    #creditos h2 { font-size: 22px; }
+    .painel-creditos h3 { font-size: 14px; }
+    .painel-creditos ul { font-size: 12px; }
+    .painel-creditos p { font-size: 11px; }
+    .btn-creditos { font-size: 12px; }
     #tabela-ranking { font-size: 12px; }
     .pokemon { transform-origin: center; }
 }
