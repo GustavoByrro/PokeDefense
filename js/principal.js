@@ -273,3 +273,92 @@ $(function () {
         $('#pontuacaoFinal').text('Pontuação: ' + jogo.pontos);
         mudarTela('resultado');
     }
+ function carregarJogadores() {
+        try {
+            return JSON.parse(localStorage.getItem('jogadores')) || [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function salvarPontuacao() {
+        const nome = $('#nome').val().trim();
+        if (nome === '') {
+            alert('Digite seu nome!');
+            return;
+        }
+
+        const existente = jogadores.find(j => j.nome.toLowerCase() === nome.toLowerCase());
+        if (existente) {
+            if (jogo.pontos > existente.pontos) existente.pontos = jogo.pontos;
+        } else {
+            jogadores.push({ nome: nome, pontos: jogo.pontos });
+        }
+
+        localStorage.setItem('jogadores', JSON.stringify(jogadores));
+        $('#nome').val('');
+        mudarTela('ranking');
+    }
+
+    function atualizarRanking() {
+        jogadores.sort((a, b) => b.pontos - a.pontos); // maior primeiro
+        const $corpo = $('#tabela-ranking tbody').empty();
+
+        if (jogadores.length === 0) {
+            $corpo.append('<tr><td class="vazio" colspan="3">Nenhum recorde ainda!</td></tr>');
+            return;
+        }
+
+        const classes = ['ouro', 'prata', 'bronze'];
+        const medalhas = ['🥇', '🥈', '🥉'];
+
+        jogadores.forEach(function (j, i) {
+            $('<tr>')
+                .addClass(classes[i] || '')
+                .append($('<td>').text(i < 3 ? medalhas[i] : (i + 1) + 'º'))
+                .append($('<td>').text(j.nome))
+                .append($('<td>').text(j.pontos))
+                .appendTo($corpo);
+        });
+    }
+
+    $(document).on('click', '[data-tela]', function () {
+        this.blur();
+        mudarTela($(this).data('tela'));
+    });
+
+    $('#btn-iniciar').on('click', function () { this.blur(); iniciarNovoJogo(); });
+    $('#btn-retomar').on('click', function () { this.blur(); retomarJogo(); });
+    $('#btn-salvar').on('click', salvarPontuacao);
+
+    $(document).on('keydown', function (e) {
+        const k = e.key;
+
+        if (telaAtual === 'resultado') {
+            if (k === 'Enter') { e.preventDefault(); salvarPontuacao(); }
+            return;
+        }
+
+        if (k === 'Escape') {
+            if (telaAtual === 'jogo') mudarTela('pausa');
+            else if (telaAtual === 'ranking' || telaAtual === 'tutorial') mudarTela('inicial');
+            else if (telaAtual === 'pausa') mudarTela('inicial');
+            return;
+        }
+
+        if (k === 'Enter') {
+            if (telaAtual === 'inicial') { e.preventDefault(); iniciarNovoJogo(); }
+            else if (telaAtual === 'pausa') { e.preventDefault(); retomarJogo(); }
+            return;
+        }
+
+        if (telaAtual === 'jogo') {
+            const tecla = k.toLowerCase();
+            if (k === 'ArrowLeft' || tecla === 'a') { e.preventDefault(); lancarBola(-1); }
+            else if (k === 'ArrowRight' || tecla === 'd') { e.preventDefault(); lancarBola(1); }
+        }
+    });
+
+    // começa na tela inicial
+    mostrarTela('inicial');
+});
