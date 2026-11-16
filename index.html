@@ -1,67 +1,99 @@
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Poke Defense</title>
     <link rel="stylesheet" href="Css/inicial.css">
     <link rel="icon" href="imgs/imgPokebolaIcone.png">
     <link href="https://fonts.cdnfonts.com/css/pokemon-solid-2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+   
     <div class="tela" id="inicial">
-        <h3 class="titulo">
-            Poke Defense
-        </h3>
-        <button class="botao" onclick="iniciarNovoJogo(1)">
-            Iniciar
-        </button>
-        <button class="botao" onclick="mudarTela('ranking')">
-             Ranking
-        </button>
-        <button class="botao" onclick="mudarTela('tutorial')">
-                Tutorial / Controles
-        </button>
+        <h3 class="titulo">Poke Defense</h3>
+        <button class="botao" id="btn-iniciar">Iniciar</button>
+        <button class="botao" data-tela="ranking">Ranking</button>
+        <button class="botao" data-tela="tutorial">Tutorial / Controles</button>
     </div>
-    
+
     <div class="tela" id="jogo">
-        <button class="pause" onclick="mudarTela('pausa')">
-            ||
-        </button>
-        <h1 id="pontuacao"> 0 </h1>
-        <button class="adicionar" onclick="aumentarPontos()">add 1</button>
+        <button class="pause" data-tela="pausa">||</button>
+
+        <div id="hud">
+            <h1 id="pontuacao">0</h1>
+            <div id="barra-vida">
+                <div id="vida-preenchimento"></div>
+                <span id="vida-texto">VIDA 100</span>
+            </div>
+        </div>
+
+        <div id="arena">
+         
+            <div id="jogador"></div>
+        </div>
     </div>
 
+   
     <div class="tela" id="ranking">
-        <button class="voltar" onclick="mudarTela('inicial')">
-            <
-        </button>
-        <h1>Ranking</h1>
-    <ol id="lista-ranking"></ol>
+        <button class="voltar" data-tela="inicial">&lt;</button>
+        <h2>Ranking</h2>
+        <div class="tabela-wrap">
+            <table id="tabela-ranking">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jogador</th>
+                        <th>Pontos</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 
+ 
     <div class="tela" id="tutorial">
-        <button class="voltar" onclick="mudarTela('inicial')">
-            <
-        </button>
+        <button class="voltar" data-tela="inicial">&lt;</button>
+        <h2>Como jogar</h2>
+        <p>Pokémons selvagens vêm dos dois lados da tela em direção ao seu treinador. Capture todos com suas pokébolas antes que eles te alcancem!</p>
+        <ul>
+            <li>← ou A: lança uma pokébola para a esquerda</li>
+            <li>→ ou D: lança uma pokébola para a direita</li>
+            <li>Esc: pausa o jogo</li>
+            <li>Enter: inicia / retoma</li>
+        </ul>
+        <ul>
+            <li>Pikachu: rápido, 1 pokébola</li>
+            <li>Arcanine: 2 pokébolas</li>
+            <li>Rhydon: 3 pokébolas</li>
+            <li>Dragonite: 4 pokébolas, dano alto!</li>
+        </ul>
+        <p>Cada pokémon que te alcança tira vida. Quando a vida zerar, o jogo acaba e sua pontuação vai para o ranking.</p>
     </div>
 
+   
     <div class="tela" id="pausa">
-        <button class="botao" onclick="retomarJogo()">Retomar</button>
+        <button class="botao" id="btn-retomar">Retomar</button>
         <button class="botao">Música</button>
-        <button class="botao" onclick="mudarTela('inicial')">Tela Inicial</button>
+        <button class="botao" data-tela="inicial">Tela Inicial</button>
     </div>
 
+   
     <div class="tela" id="resultado">
-    <h1>Fim de jogo!</h1>
+        <h2>Fim de jogo!</h2>
+        <h2 id="pontuacaoFinal"></h2>
+        <input type="text" id="nome" maxlength="12" placeholder="Digite seu nome" autocomplete="off">
+        <button class="botao" id="btn-salvar">Salvar recorde</button>
+        <button class="botao" data-tela="inicial">Não salvar</button>
+    </div>
 
-    <h2 id="pontuacaoFinal"></h2>
+    
+    <div class="transicao-metade topo"></div>
+    <div class="transicao-metade baixo"></div>
 
-    <input type="text" id="nome" placeholder="Digite seu nome">
-
-    <button class="botao" onclick="salvarPontuacao()">
-        Salvar recorde
-    </button>
-</div>
-
-<div class="transicao-metade topo"></div>
-<div class="transicao-metade baixo"></div>
-<script src="js/principal.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/principal.js"></script>
 </body>
 </html>
