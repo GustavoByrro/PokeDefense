@@ -200,9 +200,13 @@ body {
 }
 
 .spawn-esquerda {
-    left: -120px;
+    left: 0px;
 }
 
 .spawn-direita {
-    right: -120px;
+    right: 0px;
+}
+
+#lista-ranking{
+    background-color: #ffcd01;
 }
