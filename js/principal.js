@@ -341,7 +341,7 @@ $(function () {
 
         if (k === 'Escape') {
             if (telaAtual === 'jogo') mudarTela('pausa');
-            else if (telaAtual === 'ranking' || telaAtual === 'tutorial') mudarTela('inicial');
+            else if (telaAtual === 'ranking' || telaAtual === 'tutorial' || telaAtual === 'creditos') mudarTela('inicial');
             else if (telaAtual === 'pausa') mudarTela('inicial');
             return;
         }
