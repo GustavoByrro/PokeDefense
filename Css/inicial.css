@@ -1,3 +1,9 @@
+:root {
+    --tam-pokemon: 120px;
+    --tam-jogador: 110px;
+    --tam-bola: 32px;
+}
+
 html, body { height: 100%; }
 
 body {
@@ -11,20 +17,32 @@ body {
     background-position: center bottom;
     background-repeat: no-repeat;
     image-rendering: pixelated;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .tela {
     display: none;
     position: relative;
     height: 100vh;
+    height: 100dvh;   /* altura real da janela, descontando a barra do navegador no celular */
     box-sizing: border-box;
-    padding: 80px 20px 20px;
+    padding: calc(80px + env(safe-area-inset-top, 0px))
+             max(20px, env(safe-area-inset-right, 0px))
+             max(20px, env(safe-area-inset-bottom, 0px))
+             max(20px, env(safe-area-inset-left, 0px));
     text-align: center;
     overflow: hidden;
 }
 
 #inicial { display: block; }
 #ranking, #tutorial, #creditos { overflow-y: auto; }
+#inicial, #pausa, #resultado {
+    overflow-x: hidden;
+    overflow-y: auto;      /* se o menu não couber (celular deitado), rola em vez de cortar */
+    scrollbar-width: none;
+}
+#inicial::-webkit-scrollbar, #pausa::-webkit-scrollbar, #resultado::-webkit-scrollbar { display: none; }
 #tutorial {
     overflow-x: hidden;
     scrollbar-width: none;
@@ -35,8 +53,8 @@ body {
 }
 #tutorial .voltar { 
     position: fixed;
-    top: 15px;
-    left: 15px;
+    top: calc(15px + env(safe-area-inset-top, 0px));
+    left: calc(15px + env(safe-area-inset-left, 0px));
 }
 
 .titulo {
@@ -64,10 +82,12 @@ body {
     box-shadow: 0 6px 0 #8b5a2b;
 }
 
-.botao:hover,
-.pause:hover,
-.voltar:hover,
-.btn-creditos:hover { background-color: #fff2a8; }
+@media (hover: hover) {
+    .botao:hover,
+    .pause:hover,
+    .voltar:hover,
+    .btn-creditos:hover { background-color: #fff2a8; }
+}
 
 .botao:active,
 .pause:active,
@@ -91,14 +111,32 @@ body {
 .pause,
 .voltar {
     position: absolute;
-    top: 15px;
+    top: calc(15px + env(safe-area-inset-top, 0px));
     z-index: 30;
     padding: 10px 16px;
     font-size: 20px;
     border-radius: 10px;
 }
-.pause { right: 15px; }
-.voltar { left: 15px; }
+/* Alvos de toque de pelo menos 44px e sem atraso de duplo toque */
+.botao, .pause, .voltar, .btn-creditos { touch-action: manipulation; }
+.pause, .voltar { min-width: 44px; min-height: 44px; }
+.btn-creditos { min-height: 44px; }
+
+/* Na tela do jogo o toque lança a pokébola: nada de rolar, dar zoom ou selecionar texto */
+#jogo {
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.dica-toque { display: none; }
+@media (hover: none) {
+    #tutorial .dica-toque { display: block; }
+}
+
+.pause { right: calc(15px + env(safe-area-inset-right, 0px)); }
+.voltar { left: calc(15px + env(safe-area-inset-left, 0px)); }
 
 #ranking h2,
 #tutorial h2,
@@ -149,9 +187,11 @@ body {
 }
 
 .tabela-wrap {
+    box-sizing: border-box;
     max-width: 820px;
     width: 100%;
     max-height: 60vh;
+    max-height: 60dvh;
     margin: 0 auto;
     overflow-y: auto;
     background-color: rgba(255, 250, 220, 0.95);
@@ -191,8 +231,10 @@ body {
 #tabela-ranking tbody tr:nth-child(even) {
     background-color: rgba(250, 230, 120, 0.35);
 }
-#tabela-ranking tbody tr:hover {
-    background-color: rgba(255, 205, 1, 0.45);
+@media (hover: hover) {
+    #tabela-ranking tbody tr:hover {
+        background-color: rgba(255, 205, 1, 0.45);
+    }
 }
 
 #tabela-ranking td:nth-child(1) { width: 12%; font-weight: bold; }
@@ -230,8 +272,8 @@ body {
 
 .btn-creditos {
     position: absolute;
-    right: 15px;
-    bottom: 20px;
+    right: calc(15px + env(safe-area-inset-right, 0px));
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     padding: 10px 16px;
     font-size: 16px;
     border-radius: 10px;
@@ -272,9 +314,14 @@ body {
 
 .mensagem-especial {
     position: absolute;
-    top: 90px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: calc(90px + env(safe-area-inset-top, 0px));
+    left: 0;
+    right: 0;
+    width: fit-content;
+    max-width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 1.5;
     z-index: 40;
     padding: 10px 18px;
     font-size: 12px;
@@ -369,8 +416,8 @@ body {
     position: absolute;
     left: 50%;
     top: 80%;
-    width: 110px;
-    height: 110px;
+    width: var(--tam-jogador);
+    height: var(--tam-jogador);
     transform: translate(-50%, -50%);
     z-index: 900;
     transition: transform 0.08s ease;
@@ -399,8 +446,8 @@ body {
 
 .pokemon {
     position: absolute;
-    width: 120px;
-    height: 120px;
+    width: var(--tam-pokemon);
+    height: var(--tam-pokemon);
 }
 .pokemon .corpo { width: 100%; height: 100%; animation: andar 0.35s steps(2) infinite; }
 .pokemon.especial .corpo { animation: none; }
@@ -432,9 +479,9 @@ body {
 
 .bola {
     position: absolute;
-    width: 32px;
-    height: 32px;
-    margin: -16px 0 0 -16px;
+    width: var(--tam-bola);
+    height: var(--tam-bola);
+    margin: calc(var(--tam-bola) / -2) 0 0 calc(var(--tam-bola) / -2);
     background: url(../imgs/imgPokebolaIcone.png) center / contain no-repeat;
     z-index: 850;
     animation: girar 0.4s linear infinite;
@@ -461,7 +508,12 @@ body {
 }
 
 @media (max-width: 600px) {
-    .tela { padding: 65px 12px 16px; }
+    .tela {
+        padding: calc(65px + env(safe-area-inset-top, 0px))
+                 max(12px, env(safe-area-inset-right, 0px))
+                 max(16px, env(safe-area-inset-bottom, 0px))
+                 max(12px, env(safe-area-inset-left, 0px));
+    }
     .titulo { font-size: 36px; margin: 10px 0 28px; }
     .botao { font-size: 16px; margin: 14px auto; padding: 14px 8px; }
     .pause, .voltar { padding: 8px 12px; font-size: 16px; }
@@ -470,9 +522,7 @@ body {
     #barra-vida { height: 24px; }
     #vida-texto { font-size: 10px; }
 
-    #jogador { width: 84px; height: 84px; }
-    .pokemon { width: 90px; height: 90px; }
-    .bola { width: 26px; height: 26px; margin: -13px 0 0 -13px; }
+    :root { --tam-pokemon: 90px; --tam-jogador: 84px; --tam-bola: 26px; }
 
     #ranking h2, #tutorial h2, #creditos h2, #resultado h2 { font-size: 20px; }
     #tutorial p, #tutorial ul { font-size: 12px; padding: 14px 16px; }
@@ -491,12 +541,40 @@ body {
     #resultado #nome { font-size: 16px; padding: 14px 10px; }
 }
 
+/* Telas baixas (celular deitado): compacta os menus */
+@media (max-height: 560px) {
+    .tela { padding-top: calc(56px + env(safe-area-inset-top, 0px)); }
+    .titulo { font-size: 44px; margin: 0 0 14px; }
+    .botao { font-size: 18px; margin: 10px auto; padding: 10px 8px; }
+    #pausa { padding-top: calc(40px + env(safe-area-inset-top, 0px)); }
+
+    .btn-creditos {
+        position: static;
+        display: block;
+        margin: 12px auto 0;
+    }
+
+    #ranking h2, #tutorial h2, #creditos h2, #resultado h2 { font-size: 20px; margin: 4px 0 10px; }
+    #resultado #nome { margin: 12px auto 6px; padding: 10px; font-size: 16px; }
+    .tabela-wrap { max-height: 50dvh; }
+    #hud { gap: 8px; }
+    #pontuacao { font-size: 22px; padding: 8px 16px; }
+    #barra-vida { height: 22px; }
+    .mensagem-especial { top: calc(56px + env(safe-area-inset-top, 0px)); }
+    :root { --tam-pokemon: 76px; --tam-jogador: 70px; --tam-bola: 22px; }
+}
+
+@media (min-width: 1500px) and (min-height: 850px) {
+    :root { --tam-pokemon: 150px; --tam-jogador: 135px; --tam-bola: 40px; }
+}
+
 .transicao-metade {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     z-index: 9999;
     pointer-events: none;
     opacity: 0;
