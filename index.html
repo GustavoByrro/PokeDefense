@@ -20,6 +20,14 @@
         <button class="botao" id="btn-iniciar">Iniciar</button>
         <button class="botao" data-tela="ranking">Ranking</button>
         <button class="botao" data-tela="tutorial">Tutorial / Controles</button>
+        <div class="controle-volume">
+            <button class="btn-volume" id="btn-volume" type="button" data-volume-toggle aria-controls="painel-volume" aria-expanded="false">♫ Volume</button>
+            <button class="btn-mute" type="button" data-volume-mute aria-pressed="false">Mutar</button>
+            <div class="volume-painel" id="painel-volume" hidden>
+                <label for="volume-musica">Volume da música <output class="volume-valor" id="volume-valor" for="volume-musica">50%</output></label>
+                <input class="volume-slider" id="volume-musica" type="range" min="0" max="100" step="1" value="50">
+            </div>
+        </div>
         <button class="btn-creditos" data-tela="creditos">Créditos</button>
     </div>
 
@@ -113,7 +121,14 @@
    
     <div class="tela" id="pausa">
         <button class="botao" id="btn-retomar">Retomar</button>
-        <button class="botao">Música</button>
+        <div class="volume-pausa">
+            <button class="botao" id="btn-volume-pausa" type="button" data-volume-toggle aria-controls="painel-volume-pausa" aria-expanded="false">Volume Música</button>
+            <div class="volume-painel volume-painel-pausa" id="painel-volume-pausa" hidden>
+                <label for="volume-musica-pausa">Volume da música <output class="volume-valor" id="volume-valor-pausa" for="volume-musica-pausa">50%</output></label>
+                <input class="volume-slider" id="volume-musica-pausa" type="range" min="0" max="100" step="1" value="50">
+            </div>
+        </div>
+        <button class="botao btn-mute-pausa" type="button" data-volume-mute aria-pressed="false">Mutar música</button>
         <button class="botao" data-tela="inicial">Tela Inicial</button>
     </div>
    

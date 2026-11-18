@@ -35,9 +35,9 @@ $(function () {
         { nome: 'Arcanine',  vida: 4, dano: 35, pontos: 60, velocidade: 70, peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/arcanine.png' }
     ];
 
-    const LISTA_PERSONAGENS_ESPECIAIS = [
+    const Lista_Venezuelanos = [
         { nome: 'Arthur', vida: 2, dano: 100, pontos: 20, velocidade: 140, olhaPara: 'direita', srcImg: 'imgs/Arthur.jpeg' },
-        { nome: 'Gustavo', vida: 2, dano: 100, pontos: -20, velocidade: 140, olhaPara: 'direita', srcImg: 'imgs/Gustavoglagla.jpeg' },
+        { nome: 'Gustavo', vida: 2, dano: 100, pontos: -10, velocidade: 140, olhaPara: 'direita', srcImg: 'imgs/Gustavoglagla.jpeg' },
         { nome: 'Benicio', vida: 2, dano: 100, pontos: 20, velocidade: 140, olhaPara: 'direita', srcImg: 'imgs/Benicio.jpeg' },
         { nome: 'Pedro', vida: 2, dano: 100, pontos: 20, velocidade: 140, olhaPara: 'esquerda', srcImg: 'imgs/PedroNegro.jpeg' },
         { nome: 'Gomes', vida: 2, dano: 100, pontos: 20, velocidade: 140, olhaPara: 'esquerda', srcImg: 'imgs/Gomes.jpeg' },
@@ -70,8 +70,35 @@ $(function () {
     const $pontuacao = $('#pontuacao');
     const audioInicial = document.getElementById('audio-inicial');
     const audioBatalha = document.getElementById('audio-batalha');
+    const controlesVolumeMusica = document.querySelectorAll('.volume-slider');
+    const botoesVolumeMusica = document.querySelectorAll('[data-volume-toggle]');
+    const botoesMutarMusica = document.querySelectorAll('[data-volume-mute]');
 
     let audioDestravado = false;
+    let musicaMutada = false;
+
+    function atualizarVolumeMusica(valor) {
+        const volume = Number(valor) / 100;
+        audioInicial.volume = volume;
+        audioBatalha.volume = volume;
+        controlesVolumeMusica.forEach(function (controle) {
+            controle.value = valor;
+        });
+        document.querySelectorAll('.volume-valor').forEach(function (indicador) {
+            indicador.value = Math.round(volume * 100) + '%';
+        });
+    }
+
+    atualizarVolumeMusica(controlesVolumeMusica[0].value);
+
+    function atualizarEstadoMutado() {
+        audioInicial.muted = musicaMutada;
+        audioBatalha.muted = musicaMutada;
+        botoesMutarMusica.forEach(function (botao) {
+            botao.setAttribute('aria-pressed', String(musicaMutada));
+            botao.textContent = musicaMutada ? 'Ativar música' : 'Mutar música';
+        });
+    }
 
     function tocarMusica(tipo) {
         if (tipo === 'inicial') {
@@ -84,12 +111,11 @@ $(function () {
             });
         } else if (tipo === 'batalha') {
             audioInicial.pause();
+            if (!audioBatalha.paused) return;
             audioInicial.currentTime = 0;
             audioBatalha.play().catch(err => {
                 console.log("Erro ao tocar música de batalha:", err);
             });
-        } else if (tipo === 'pausa') {
-            audioBatalha.pause();
         }
     }
 
@@ -98,6 +124,28 @@ $(function () {
         if (!audioDestravado && telaAtual === 'inicial') {
             tocarMusica('inicial');
         }
+    });
+
+    botoesVolumeMusica.forEach(function (botao) {
+        botao.addEventListener('click', function () {
+            const painel = document.getElementById(botao.getAttribute('aria-controls'));
+            const aberto = botao.getAttribute('aria-expanded') === 'true';
+            botao.setAttribute('aria-expanded', String(!aberto));
+            painel.hidden = aberto;
+        });
+    });
+
+    botoesMutarMusica.forEach(function (botao) {
+        botao.addEventListener('click', function () {
+            musicaMutada = !musicaMutada;
+            atualizarEstadoMutado();
+        });
+    });
+
+    controlesVolumeMusica.forEach(function (controle) {
+        controle.addEventListener('input', function () {
+            atualizarVolumeMusica(controle.value);
+        });
     });
 
     const SUPABASE_URL = 'https://ekatgswxxieaqandkekq.supabase.co';
@@ -209,9 +257,7 @@ $(function () {
 
         if (id === 'jogo') {
             tocarMusica('batalha');
-        } else if (id === 'pausa') {
-            tocarMusica('pausa');
-        } else {
+        } else if (id !== 'pausa') {
             tocarMusica('inicial');
         }
     }
@@ -417,7 +463,7 @@ $(function () {
     }
 
     function criarPersonagemEspecial(m) {
-        const def = LISTA_PERSONAGENS_ESPECIAIS[Math.floor(Math.random() * LISTA_PERSONAGENS_ESPECIAIS.length)];
+        const def = Lista_Venezuelanos[Math.floor(Math.random() * Lista_Venezuelanos.length)];
         const doLadoEsquerdo = Math.random() < 0.5;
         const dir = doLadoEsquerdo ? 1 : -1;
         const x = doLadoEsquerdo ? -METADE : m.W + METADE;

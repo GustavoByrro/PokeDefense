@@ -73,7 +73,9 @@ body {
 .botao,
 .pause,
 .voltar,
-.btn-creditos {
+.btn-creditos,
+.btn-volume,
+.btn-mute {
     font-family: inherit;
     color: indigo;
     cursor: pointer;
@@ -86,13 +88,17 @@ body {
     .botao:hover,
     .pause:hover,
     .voltar:hover,
-    .btn-creditos:hover { background-color: #fff2a8; }
+    .btn-creditos:hover,
+    .btn-volume:hover,
+    .btn-mute:hover { background-color: #fff2a8; }
 }
 
 .botao:active,
 .pause:active,
 .voltar:active,
-.btn-creditos:active {
+.btn-creditos:active,
+.btn-volume:active,
+.btn-mute:active {
     transform: translateY(4px);
     box-shadow: 0 2px 0 #8b5a2b;
 }
@@ -118,9 +124,9 @@ body {
     border-radius: 10px;
 }
 /* Alvos de toque de pelo menos 44px e sem atraso de duplo toque */
-.botao, .pause, .voltar, .btn-creditos { touch-action: manipulation; }
+.botao, .pause, .voltar, .btn-creditos, .btn-volume, .btn-mute { touch-action: manipulation; }
 .pause, .voltar { min-width: 44px; min-height: 44px; }
-.btn-creditos { min-height: 44px; }
+.btn-creditos, .btn-volume, .btn-mute { min-height: 44px; }
 
 /* Na tela do jogo o toque lança a pokébola: nada de rolar, dar zoom ou selecionar texto */
 #jogo {
@@ -277,6 +283,80 @@ body {
     padding: 10px 16px;
     font-size: 16px;
     border-radius: 10px;
+}
+
+.controle-volume {
+    position: absolute;
+    left: calc(15px + env(safe-area-inset-left, 0px));
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    z-index: 20;
+}
+
+.btn-volume {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-radius: 10px;
+}
+
+.controle-volume .btn-mute {
+    padding: 10px 12px;
+    font-size: 10px;
+    border-radius: 10px;
+}
+
+.volume-pausa {
+    width: 560px;
+    max-width: 90%;
+    margin: 22px auto;
+}
+
+.volume-pausa .botao {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+.volume-painel {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 10px);
+    display: grid;
+    gap: 12px;
+    width: min(300px, calc(100vw - 30px));
+    box-sizing: border-box;
+    padding: 14px;
+    color: #2b1a4a;
+    background-color: rgba(255, 250, 220, 0.96);
+    border: 4px solid saddlebrown;
+    border-radius: 12px;
+    box-shadow: 0 6px 0 #8b5a2b;
+}
+
+.volume-painel[hidden] { display: none; }
+
+.volume-painel-pausa {
+    position: static;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.volume-painel label {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 10px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.volume-slider {
+    width: 100%;
+    margin: 0;
+    accent-color: #3660AD;
+    cursor: pointer;
 }
 
 .painel-creditos {
@@ -534,6 +614,8 @@ body {
     .painel-creditos ul { font-size: 12px; }
     .painel-creditos p { font-size: 11px; }
     .btn-creditos { font-size: 12px; padding: 8px 12px; }
+    .btn-volume { font-size: 12px; padding: 8px 12px; }
+    .controle-volume .btn-mute { font-size: 10px; padding: 8px 10px; }
 
     #tabela-ranking { font-size: 10px; }
     #tabela-ranking th, #tabela-ranking td { padding: 10px 4px; }
@@ -553,6 +635,17 @@ body {
         display: block;
         margin: 12px auto 0;
     }
+    .controle-volume {
+        position: static;
+        justify-content: center;
+        margin: 12px auto;
+        width: fit-content;
+    }
+    .volume-painel {
+        position: static;
+        margin-top: 10px;
+    }
+    .volume-pausa { margin: 10px auto; }
 
     #ranking h2, #tutorial h2, #creditos h2, #resultado h2 { font-size: 20px; margin: 4px 0 10px; }
     #resultado #nome { margin: 12px auto 6px; padding: 10px; font-size: 16px; }
