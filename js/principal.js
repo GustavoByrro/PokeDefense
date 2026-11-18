@@ -1,12 +1,28 @@
 $(function () {
 
-    const TAM = 120;                 
-    const METADE = TAM / 2;
+    // Tamanhos que dependem da tela. Vêm do CSS (--tam-pokemon, --tam-bola) e são
+    // relidos quando a janela muda, assim sprite, posição e colisão ficam sempre alinhados.
+    const TAM_BASE = 120;
+    let TAM = TAM_BASE;
+    let METADE = TAM / 2;
+    let ESCALA = 1;
+    let RAIO_BOLA = 16;
+
+    function lerEscala() {
+        const estilo = getComputedStyle(document.documentElement);
+        TAM = parseFloat(estilo.getPropertyValue('--tam-pokemon')) || TAM_BASE;
+        RAIO_BOLA = (parseFloat(estilo.getPropertyValue('--tam-bola')) || 32) / 2;
+        METADE = TAM / 2;
+        ESCALA = TAM / TAM_BASE;
+    }
+    lerEscala();
+    $(window).on('resize orientationchange', lerEscala);
     const VIDA_MAXIMA = 100;
     const VEL_BOLA = 750;            
     const COOLDOWN_TIRO = 300;       
-    const DIST_CONTATO = 80;         
-    const TOLERANCIA_Y = 70;         
+    const DIST_CONTATO_BASE = 80;
+    const TOLERANCIA_Y_BASE = 70;
+    const JITTER_Y_BASE = 50;
 
     const LISTA_POKEMONS = [
         { nome: 'Rattata',   vida: 1, dano: 10, pontos: 10, velocidade: 170, peso: 4, olhaPara: 'esquerda', srcImg: 'imgs/rattata-f.png' },
@@ -246,6 +262,7 @@ $(function () {
     }
 
     function iniciarNovoJogo() {
+        lerEscala();
         modoEspecial = false;
         modoBossFinal = false;
         proximoSpawnEspecial = 0;
@@ -326,7 +343,7 @@ $(function () {
             let acertou = false;
             for (const p of jogo.pokemons) {
                 if (p.morto) continue;
-                if (Math.abs(b.x - p.x) < METADE * 0.7 + 16 && Math.abs(m.yTiro - p.y) < TOLERANCIA_Y) {
+                if (Math.abs(b.x - p.x) < METADE * 0.7 + RAIO_BOLA && Math.abs(m.yTiro - p.y) < TOLERANCIA_Y_BASE * ESCALA) {
                     acertarPokemon(p);
                     acertou = true;
                     break;
@@ -348,7 +365,7 @@ $(function () {
             p.x += p.dir * p.def.velocidade * aceleracao * dt;
             p.$el.css('left', p.x - METADE);
 
-            if (Math.abs(p.x - m.cx) < DIST_CONTATO) {
+            if (Math.abs(p.x - m.cx) < DIST_CONTATO_BASE * ESCALA) {
                 p.morto = true;
                 p.$el.remove();
                 jogo.pokemons.splice(i, 1);
@@ -395,7 +412,7 @@ $(function () {
         const doLado = Math.random() < 0.5 ? 'esq' : 'dir';
         const dir = doLado === 'esq' ? 1 : -1;
         const x = doLado === 'esq' ? -METADE : m.W + METADE;
-        const y = m.yTiro + (Math.random() * 2 - 1) * 50;
+        const y = m.yTiro + (Math.random() * 2 - 1) * JITTER_Y_BASE * ESCALA;
         criarPokemonBase(def, x, y, dir);
     }
 
@@ -404,7 +421,7 @@ $(function () {
         const doLadoEsquerdo = Math.random() < 0.5;
         const dir = doLadoEsquerdo ? 1 : -1;
         const x = doLadoEsquerdo ? -METADE : m.W + METADE;
-        const y = m.yTiro + (Math.random() * 2 - 1) * 50;
+        const y = m.yTiro + (Math.random() * 2 - 1) * JITTER_Y_BASE * ESCALA;
         const alvo = { ...def, olhaPara: dir === 1 ? 'direita' : 'esquerda' };
         criarPokemonBase(alvo, x, y, dir);
     }
@@ -482,13 +499,13 @@ $(function () {
                 jogo.pontos += 67;
                 $pontuacao.text(jogo.pontos);
                 $('<div class="flutua">').text('+67')
-                    .css({ left: p.x - 20, top: p.y - METADE, color: '#ffe066' })
+                    .css({ left: p.x - 20 * ESCALA, top: p.y - METADE, color: '#ffe066' })
                     .appendTo($arena);
             } else {
                 jogo.pontos += p.def.pontos;
                 $pontuacao.text(jogo.pontos);
                 $('<div class="flutua">').text('+' + p.def.pontos)
-                    .css({ left: p.x - 20, top: p.y - METADE })
+                    .css({ left: p.x - 20 * ESCALA, top: p.y - METADE })
                     .appendTo($arena);
             }
 
@@ -736,11 +753,14 @@ $(function () {
     $('#btn-retomar').on('click', function () { this.blur(); retomarJogo(); });
     $('#btn-salvar').on('click', salvarPontuacao);
 
-    $('#jogo').on('touchstart mousedown', function (e) {
+    // pointerdown cobre mouse, toque e caneta num único evento. Antes, "touchstart mousedown"
+    // disparava duas vezes num toque longo (o navegador emula o mouse ao soltar o dedo).
+    $('#jogo').on('pointerdown', function (e) {
         if (telaAtual !== 'jogo') return;
         if ($(e.target).closest('.pause').length) return;
-        const clientX = e.type === 'touchstart' ? e.originalEvent.touches[0].clientX : e.clientX;
-        const dir = clientX < $(window).width() / 2 ? -1 : 1;
+        if (e.originalEvent.button > 0) return;
+        const area = this.getBoundingClientRect();
+        const dir = e.originalEvent.clientX < area.left + area.width / 2 ? -1 : 1;
         lancarBola(dir);
     });
 
