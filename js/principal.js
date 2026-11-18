@@ -612,6 +612,19 @@ $(function () {
         mudarTela('resultado');
     }
 
+    function encerrarJogoPausado() {
+        jogo.ativo = false;
+        if (modoEspecial) {
+            finalizarJogoEspecial();
+            return;
+        }
+
+        $('#nome').prop('hidden', false).val('');
+        $('#btn-salvar').text('Salvar recorde');
+        $('#pontuacaoFinal').text('Pontuação: ' + jogo.pontos);
+        mostrarTela('resultado');
+    }
+
     function lerRankingEspecial() {
         try {
             const dados = JSON.parse(localStorage.getItem('poke-defense-modo-especial') || '{}');
@@ -797,6 +810,7 @@ $(function () {
     $('#btn-iniciar').on('click', function () { this.blur(); iniciarNovoJogo(); });
     $('#btn-jogar-ranking').on('click', function () { this.blur(); iniciarNovoJogo(); });
     $('#btn-retomar').on('click', function () { this.blur(); retomarJogo(); });
+    $('#btn-tela-inicial-pausa').on('click', function () { this.blur(); encerrarJogoPausado(); });
     $('#btn-salvar').on('click', salvarPontuacao);
 
     // pointerdown cobre mouse, toque e caneta num único evento. Antes, "touchstart mousedown"
@@ -815,13 +829,17 @@ $(function () {
 
         if (telaAtual === 'resultado') {
             if (k === 'Enter') { e.preventDefault(); salvarPontuacao(); }
+            else if (k === 'Escape') {
+                e.preventDefault();
+                $('#resultado [data-tela="inicial"]').trigger('click');
+            }
             return;
         }
 
         if (k === 'Escape') {
             if (telaAtual === 'jogo') mudarTela('pausa');
             else if (telaAtual === 'ranking' || telaAtual === 'tutorial' || telaAtual === 'creditos') mudarTela('inicial');
-            else if (telaAtual === 'pausa') mudarTela('inicial');
+            else if (telaAtual === 'pausa') { e.preventDefault(); encerrarJogoPausado(); }
             return;
         }
 
