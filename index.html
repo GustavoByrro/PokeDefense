@@ -10,6 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Elementos de Áudio -->
+    <audio id="audio-inicial" src="Músicas/TelaInicial_pokedefense.mpeg" loop preload="auto"></audio>
+    <audio id="audio-batalha" src="Músicas/Batalha_pokedefense.mpeg" loop preload="auto"></audio>
    
     <div class="tela" id="inicial">
         <h3 class="titulo">Poke Defense</h3>
@@ -32,13 +36,11 @@
         </div>
 
         <div id="arena">
-            <!-- Personagem substituído pelo sprite com imagem padrão -->
             <div id="jogador">
                 <img id="sprite-jogador" src="imgs/personagem_idle.png" alt="Treinador">
             </div>
         </div>
     </div>
-
    
     <div class="tela" id="ranking">
         <button class="voltar" data-tela="inicial">&lt;</button>
@@ -58,7 +60,6 @@
         </div>
         <button class="botao" id="btn-jogar-ranking">Jogar</button>
     </div>
-
  
     <div class="tela" id="tutorial">
         <button class="voltar" data-tela="inicial">&lt;</button>
@@ -82,7 +83,6 @@
         </ul>
         <p>Cada pokémon que te alcança tira vida. Quando a vida zerar, o jogo acaba e sua pontuação vai para o ranking.</p>
     </div>
-
    
     <div class="tela" id="creditos">
         <button class="voltar" data-tela="inicial">&lt;</button>
@@ -115,7 +115,6 @@
         <button class="botao">Música</button>
         <button class="botao" data-tela="inicial">Tela Inicial</button>
     </div>
-
    
     <div class="tela" id="resultado">
         <h2>Fim de jogo!</h2>
@@ -124,7 +123,6 @@
         <button class="botao" id="btn-salvar">Salvar recorde</button>
         <button class="botao" data-tela="inicial">Não salvar</button>
     </div>
-
     
     <div class="transicao-metade topo"></div>
     <div class="transicao-metade baixo"></div>

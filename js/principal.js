@@ -1,14 +1,13 @@
 $(function () {
 
-    const TAM = 120;                 // tamanho do pokémon na tela (px)
+    const TAM = 120;                 
     const METADE = TAM / 2;
     const VIDA_MAXIMA = 100;
-    const VEL_BOLA = 750;            // px por segundo
-    const COOLDOWN_TIRO = 300;       // ms entre lançamentos
-    const DIST_CONTATO = 80;         // distância em que o pokémon alcança o jogador
-    const TOLERANCIA_Y = 70;         // tolerância vertical para acertar
+    const VEL_BOLA = 750;            
+    const COOLDOWN_TIRO = 300;       
+    const DIST_CONTATO = 80;         
+    const TOLERANCIA_Y = 70;         
 
-    // olhaPara: para que lado a imagem original está virada
     const LISTA_POKEMONS = [
         { nome: 'Rattata',   vida: 1, dano: 10, pontos: 10, velocidade: 170, peso: 4, olhaPara: 'esquerda', srcImg: 'imgs/rattata-f.png' },
         { nome: 'Pikachu',   vida: 1, dano: 15, pontos: 15, velocidade: 150, peso: 4, olhaPara: 'esquerda', srcImg: 'imgs/pikachu.png' },
@@ -29,7 +28,6 @@ $(function () {
         { nome: 'Davi', vida: 2, dano: 100, pontos: 20, velocidade: 140, olhaPara: 'esquerda', srcImg: 'imgs/Davi.jpeg' }
     ];
 
-    
     let telaAtual = 'inicial';
     let telaAnterior = 'inicial';
     let transicionando = false;
@@ -54,6 +52,37 @@ $(function () {
 
     const $arena = $('#arena');
     const $pontuacao = $('#pontuacao');
+    const audioInicial = document.getElementById('audio-inicial');
+    const audioBatalha = document.getElementById('audio-batalha');
+
+    let audioDestravado = false;
+
+    function tocarMusica(tipo) {
+        if (tipo === 'inicial') {
+            audioBatalha.pause();
+            audioBatalha.currentTime = 0;
+            audioInicial.play().then(() => {
+                audioDestravado = true;
+            }).catch(err => {
+                console.log("Aguardando interação do usuário para tocar o áudio:", err);
+            });
+        } else if (tipo === 'batalha') {
+            audioInicial.pause();
+            audioInicial.currentTime = 0;
+            audioBatalha.play().catch(err => {
+                console.log("Erro ao tocar música de batalha:", err);
+            });
+        } else if (tipo === 'pausa') {
+            audioBatalha.pause();
+        }
+    }
+
+    // Destrava e toca o som no primeiro clique em qualquer lugar da tela inicial
+    $(document).on('click', function () {
+        if (!audioDestravado && telaAtual === 'inicial') {
+            tocarMusica('inicial');
+        }
+    });
 
     const SUPABASE_URL = 'https://ekatgswxxieaqandkekq.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_5aZarxSIiVmx8OYfRTuk0g_H_mckxnI';
@@ -161,6 +190,14 @@ $(function () {
         telaAtual = id;
         if (id === 'ranking') atualizarRanking();
         if (id === 'resultado' && !$('#nome').prop('hidden')) $('#nome').trigger('focus');
+
+        if (id === 'jogo') {
+            tocarMusica('batalha');
+        } else if (id === 'pausa') {
+            tocarMusica('pausa');
+        } else {
+            tocarMusica('inicial');
+        }
     }
 
     function mostrarMensagemEspecial() {
@@ -404,7 +441,6 @@ $(function () {
         const $jogador = $('#jogador');
         const $sprite = $('#sprite-jogador');
 
-        // Espelha o sprite se atirar para a esquerda (dir === -1)
         $jogador.toggleClass('virado', dir < 0);
 
         clearTimeout(timerAnimacaoJogador);
