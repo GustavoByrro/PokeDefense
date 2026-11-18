@@ -21,6 +21,7 @@
 
     <div class="tela" id="jogo">
         <button class="pause" data-tela="pausa">||</button>
+        <div id="mensagem-especial" class="mensagem-especial" hidden>MODO ESPECIAL · venezuelanos</div>
 
         <div id="hud">
             <h1 id="pontuacao">0</h1>
@@ -40,18 +41,20 @@
     <div class="tela" id="ranking">
         <button class="voltar" data-tela="inicial">&lt;</button>
         <h2>Ranking</h2>
-        <div class="tabela-wrap">
+        <div class="tabela-wrap tabela-ranking-unica">
             <table id="tabela-ranking">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Jogador</th>
                         <th>Pontos</th>
+                        <th>Modo especial</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
+        <button class="botao" id="btn-jogar-ranking">Jogar</button>
     </div>
 
  
@@ -65,165 +68,15 @@
             <li>Esc: pausa o jogo</li>
             <li>Enter: inicia / retoma</li>
         </ul>
-        <ul>
-            <li>Pikachu: rápido, 1 pokébola</li>
-            <li>Arcanine: 2 pokébolas</li>
-            <li>Rhydon: 3 pokébolas</li>
-            <li>Dragonite: 4 pokébolas, dano alto!</li>
-
-            <li>Clefable: 4 pokébolas, dano alto!</li>
-            <li>Beedrill: 4 pokébolas, dano alto!</li>
-            <li>Vileplume: 4 pokébolas, dano alto!</li>
-            <li>Onix: 4 pokébolas, dano alto!</li>
-            <li>Mr. Mime: 4 pokébolas, dano alto!</li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    { nome: 'Dragonite', vida: 5, dano: 40, pontos: 90, velocidade: 60,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' },
-        { nome: 'Clefable', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/clefable.png' },
-        { nome: 'Beedrill', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-        { nome: 'Vileplume', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-                { nome: 'Dragonite', vida: 5, dano: 40, pontos: 90, velocidade: 60,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' },
-        { nome: 'Clefable', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/clefable.png' },
-        { nome: 'Beedrill', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-        { nome: 'Vileplume', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-                { nome: 'Dragonite', vida: 5, dano: 40, pontos: 90, velocidade: 60,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' },
-        { nome: 'Clefable', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/clefable.png' },
-        { nome: 'Beedrill', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-        { nome: 'Vileplume', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-                { nome: 'Dragonite', vida: 5, dano: 40, pontos: 90, velocidade: 60,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' },
-        { nome: 'Clefable', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/clefable.png' },
-        { nome: 'Beedrill', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-        { nome: 'Vileplume', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-                { nome: 'Dragonite', vida: 5, dano: 40, pontos: 90, velocidade: 60,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' },
-        { nome: 'Clefable', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/clefable.png' },
-        { nome: 'Beedrill', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-        { nome: 'Vileplume', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-                { nome: 'Dragonite', vida: 5, dano: 40, pontos: 90, velocidade: 60,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' },
-        { nome: 'Clefable', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/clefable.png' },
-        { nome: 'Beedrill', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-        { nome: 'Vileplume', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-                { nome: 'Dragonite', vida: 5, dano: 40, pontos: 90, velocidade: 60,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' },
-        { nome: 'Clefable', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/clefable.png' },
-        { nome: 'Beedrill', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-        { nome: 'Vileplume', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-                { nome: 'Dragonite', vida: 5, dano: 40, pontos: 90, velocidade: 60,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/dragonite.png' },
-        { nome: 'Clefable', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/clefable.png' },
-        { nome: 'Beedrill', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-        { nome: 'Vileplume', vida: 4, dano: 35, pontos: 80, velocidade: 65,  peso: 1, olhaPara: 'esquerda', srcImg: 'imgs/beedrill.png' },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <ul class="lista-pokemons">
+            <li><img src="imgs/rattata-f.png" alt="Rattata"><span>Rattata: Vida: 1 Dano: 10 Vel: 170</span></li>
+            <li><img src="imgs/pikachu.png" alt="Pikachu"><span>Pikachu: Vida: 1 Dano: 15 Vel: 150</span></li>
+            <li><img src="imgs/beedrill.png" alt="Beedrill"><span>Beedrill: Vida: 2 Dano: 20 Vel: 130</span></li>
+            <li><img src="imgs/vileplume-f.png" alt="Vileplume"><span>Vileplume: Vida: 2 Dano: 25 Vel: 130</span></li>
+            <li><img src="imgs/rhydon.png" alt="Rhydon"><span>Rhydon: Vida: 3 Dano: 25 Vel: 85</span></li>
+            <li><img src="imgs/clefable.png" alt="Clefable"><span>Clefable: Vida: 3 Dano: 30 Vel: 85</span></li>
+            <li><img src="imgs/dragonite.png" alt="Dragonite"><span>Dragonite: Vida: 4 Dano: 35 Vel: 65</span></li>
+            <li><img src="imgs/arcanine.png" alt="Arcanine"><span>Arcanine: Vida: 4 Dano: 35 Vel: 70</span></li>
         </ul>
         <p>Cada pokémon que te alcança tira vida. Quando a vida zerar, o jogo acaba e sua pontuação vai para o ranking.</p>
     </div>
@@ -236,10 +89,10 @@
         <div class="painel-creditos">
             <h3>Desenvolvido por</h3>
             <ul>
-                <li>GustavoByrro</li>
-                <li>ArthurSouzaFerreira2</li>
-                <li>medeiros576</li>
-                <li>carolineavlr</li>
+                <li>Arthur Souza Ferreira</li>
+                <li>Caroline Vitória de Moura Avelar</li>
+                <li>Gustavo Luiz Araújo Byrro</li>
+                <li>Heitor Medeiros Arriel</li>
             </ul>
 
             <h3>Fontes</h3>
@@ -250,6 +103,8 @@
 
             <h3>Aviso</h3>
             <p>Projeto acadêmico sem fins lucrativos. Pokémon e seus personagens são marcas de Nintendo, Creatures Inc. e GAME FREAK inc.</p>
+            <h3>Menção Honrosa</h3>
+            <p>Agradecemos a todos que contribuíram para o desenvolvimento deste projeto. Vulgo Benicio</p>
         </div>
     </div>
    
