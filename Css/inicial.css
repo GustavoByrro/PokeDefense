@@ -145,15 +145,19 @@ body {
 }
 
 
+/* --- TABELA DE RANKING CORRIGIDA --- */
 .tabela-ranking-unica {
     max-width: 820px;
+    width: 95%;
     margin: 18px auto;
 }
 
 .tabela-wrap {
     max-width: 820px;
-    max-height: 65vh;
+    width: 100%;
+    max-height: 60vh;
     margin: 0 auto;
+    overflow-x: auto;
     overflow-y: auto;
     background-color: rgba(255, 250, 220, 0.95);
     border: 4px solid saddlebrown;
@@ -161,23 +165,17 @@ body {
     box-shadow: 0 6px 0 #8b5a2b;
 }
 
-.tabela-wrap h3 {
-    margin: 0;
-    padding: 16px 18px 8px;
-    color: #3660AD;
-    font-size: 18px;
-    text-align: left;
+#tabela-ranking {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #2b1a4a;
 }
 
-.especial-wrap {
-    margin-top: 22px;
-}
-
-#tabela-ranking,
-#tabela-ranking-especial th,
-#tabela-ranking-especial th {
+#tabela-ranking th {
     position: sticky;
     top: 0;
+    z-index: 2;
     padding: 16px 10px;
     color: #ffcd01;
     text-shadow: 2px 2px 0 #1f2a6b;
@@ -185,28 +183,33 @@ body {
     border-bottom: 4px solid #1f2a6b;
 }
 
-#tabela-ranking td,
-#tabela-ranking-especial td {
+#tabela-ranking td {
     padding: 14px 10px;
     border-bottom: 2px dashed rgba(139, 69, 19, 0.35);
 }
 
-#tabela-ranking tbody tr:nth-child(even),
-#tabela-ranking-especial tbody tr:nth-child(even) { background-color: rgba(250, 230, 120, 0.35); }
-#tabela-ranking tbody tr:hover,
-#tabela-ranking-especial tbody tr:hover { background-color: rgba(255, 205, 1, 0.45); }
+#tabela-ranking tbody tr:nth-child(even) {
+    background-color: rgba(250, 230, 120, 0.35);
+}
 
-#tabela-ranking td:nth-child(1) { width: 18%; }
-#tabela-ranking td:nth-child(2) { text-align: left; padding-left: 20px; word-break: break-word; }
-#tabela-ranking td:nth-child(3) { width: 28%; color: #b3261e; }
-#tabela-ranking-especial td:nth-child(1) { width: 22%; }
-#tabela-ranking-especial td:nth-child(2) { width: 78%; color: #b3261e; }
+#tabela-ranking tbody tr:hover {
+    background-color: rgba(255, 205, 1, 0.45);
+}
 
-#tabela-ranking tr.ouro td    { background-color: #ffe066; font-weight: bold; }
-#tabela-ranking tr.prata td   { background-color: #dfe4ea; }
-#tabela-ranking tr.bronze td  { background-color: #e8b98a; }
-#tabela-ranking td.vazio,
-#tabela-ranking-especial td.vazio { padding: 30px; color: #6b5a8a; }
+#tabela-ranking td:nth-child(1) { width: 12%; font-weight: bold; }
+#tabela-ranking td:nth-child(2) { text-align: left; padding-left: 16px; word-break: break-word; }
+#tabela-ranking td:nth-child(3) { width: 22%; color: #b3261e; font-weight: bold; }
+#tabela-ranking td:nth-child(4) { width: 24%; color: #6b21a8; }
+
+#tabela-ranking tbody tr:nth-child(1) td { background-color: rgba(255, 224, 102, 0.75); }
+#tabela-ranking tbody tr:nth-child(2) td { background-color: rgba(223, 228, 234, 0.75); }
+#tabela-ranking tbody tr:nth-child(3) td { background-color: rgba(232, 185, 138, 0.75); }
+
+#tabela-ranking td.vazio {
+    padding: 30px;
+    color: #6b5a8a;
+    text-align: center;
+}
 
 
 #resultado #nome {
@@ -227,7 +230,6 @@ body {
 }
 #resultado #nome:focus { border-color: #3660AD; }
 
-/* Créditos: botão pequeno no canto da tela inicial + painel */
 .btn-creditos {
     position: absolute;
     right: 15px;
@@ -365,25 +367,37 @@ body {
     100% { filter: hue-rotate(360deg) saturate(1.2) brightness(1.1); }
 }
 
+/* --- JOGADOR (SPRITE NO LUGAR DO BLOCO) --- */
 #jogador {
     position: absolute;
     left: 50%;
     top: 80%;
-    width: 64px;
-    height: 64px;
-    margin: -32px 0 0 -32px;
-    box-sizing: border-box;
-    background-color: #e63946;
-    border: 4px solid #1f2a6b;
-    border-radius: 8px;
-    box-shadow: inset -6px -6px 0 rgba(0, 0, 0, 0.25), 0 8px 0 rgba(0, 0, 0, 0.25);
+    width: 110px;
+    height: 110px;
+    transform: translate(-50%, -50%);
     z-index: 900;
+    transition: transform 0.08s ease;
 }
-#jogador.dano { animation: piscar 0.3s steps(2) 2; }
 
-@keyframes piscar {
-    0%   { background-color: #fff; }
-    100% { background-color: #e63946; }
+#jogador.virado {
+    transform: translate(-50%, -50%) scaleX(-1);
+}
+
+#jogador img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+#jogador.dano {
+    animation: piscarDano 0.3s steps(2) 2;
+}
+
+@keyframes piscarDano {
+    0%   { filter: brightness(3) sepia(1) hue-rotate(-50deg) saturate(5); }
+    100% { filter: none; }
 }
 
 .pokemon {
@@ -442,20 +456,43 @@ body {
 }
 @keyframes subir { 100% { transform: translateY(-60px); opacity: 0; } }
 
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+    .titulo { font-size: 54px; margin-bottom: 36px; }
+    .botao { font-size: 22px; padding: 15px 10px; }
+    #tabela-ranking { font-size: 12px; }
+    #tabela-ranking th, #tabela-ranking td { padding: 12px 6px; }
+}
+
 @media (max-width: 600px) {
-    .tela { padding-top: 70px; }
-    .titulo { font-size: 34px; margin-bottom: 30px; }
-    .botao { font-size: 18px; }
-    #pontuacao { font-size: 24px; }
-    #ranking h2, #tutorial h2, #resultado h2 { font-size: 22px; }
-    #tutorial p, #tutorial ul { font-size: 13px; }
-    #creditos h2 { font-size: 22px; }
+    .tela { padding: 65px 12px 16px; }
+    .titulo { font-size: 36px; margin: 10px 0 28px; }
+    .botao { font-size: 16px; margin: 14px auto; padding: 14px 8px; }
+    .pause, .voltar { padding: 8px 12px; font-size: 16px; }
+
+    #pontuacao { font-size: 22px; padding: 10px 18px; }
+    #barra-vida { height: 24px; }
+    #vida-texto { font-size: 10px; }
+
+    #jogador { width: 84px; height: 84px; }
+    .pokemon { width: 90px; height: 90px; }
+    .bola { width: 26px; height: 26px; margin: -13px 0 0 -13px; }
+
+    #ranking h2, #tutorial h2, #creditos h2, #resultado h2 { font-size: 20px; }
+    #tutorial p, #tutorial ul { font-size: 12px; padding: 14px 16px; }
+    #tutorial ul { padding-left: 34px; }
+    #tutorial .lista-pokemons { padding: 10px 14px; }
+    #tutorial .lista-pokemons img { width: 38px; height: 38px; flex-basis: 38px; }
+
     .painel-creditos h3 { font-size: 14px; }
     .painel-creditos ul { font-size: 12px; }
     .painel-creditos p { font-size: 11px; }
-    .btn-creditos { font-size: 12px; }
-    #tabela-ranking { font-size: 12px; }
-    .pokemon { transform-origin: center; }
+    .btn-creditos { font-size: 12px; padding: 8px 12px; }
+
+    #tabela-ranking { font-size: 10px; }
+    #tabela-ranking th, #tabela-ranking td { padding: 10px 4px; }
+    #tabela-ranking td:nth-child(2) { padding-left: 8px; }
+    #resultado #nome { font-size: 16px; padding: 14px 10px; }
 }
 
 .transicao-metade {

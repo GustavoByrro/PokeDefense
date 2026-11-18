@@ -173,7 +173,6 @@ $(function () {
     }
 
     function mudarTela(destino) {
-        // Pausa e retomada são instantâneas (sem animação)
         if (destino === 'pausa') {
             telaAnterior = telaAtual;
             mostrarTela('pausa');
@@ -188,7 +187,7 @@ $(function () {
         transicionando = true;
 
         if (destino === 'inicial' && telaAtual !== 'resultado') {
-            jogo.ativo = false; // partida abandonada
+            jogo.ativo = false;
         }
 
         const $topo = $('.transicao-metade.topo');
@@ -196,7 +195,7 @@ $(function () {
 
         $topo.removeClass('animar-topo');
         $baixo.removeClass('animar-baixo');
-        void $topo[0].offsetWidth; // reinicia a animação
+        void $topo[0].offsetWidth; 
         $topo.addClass('animar-topo');
         $baixo.addClass('animar-baixo');
 
@@ -242,7 +241,7 @@ $(function () {
         const dt = Math.min((agora - jogo.ultimoFrame) / 1000, 0.05);
         jogo.ultimoFrame = agora;
 
-        if (telaAtual !== 'jogo') return; // pausado / em transição
+        if (telaAtual !== 'jogo') return; 
         atualizar(dt);
     }
 
@@ -274,7 +273,6 @@ $(function () {
                 return;
             }
         } else {
-            // --- spawn (fica mais rápido com o tempo) ---
             jogo.proxSpawn -= dt * 1000;
             if (jogo.proxSpawn <= 0) {
                 criarPokemon(m);
@@ -283,7 +281,6 @@ $(function () {
             }
         }
 
-        // --- pokébolas ---
         for (let i = jogo.bolas.length - 1; i >= 0; i--) {
             const b = jogo.bolas[i];
             b.x += b.dir * VEL_BOLA * dt;
@@ -304,7 +301,6 @@ $(function () {
             }
         }
 
-        // --- pokémons ---
         const aceleracao = modoEspecial
             ? Math.min(1 + jogo.tempo / 40, 2.5)
             : Math.min(1 + jogo.tempo / 120, 1.8);
@@ -323,7 +319,6 @@ $(function () {
                 if (!jogo.ativo) return;
             }
         }
-
     }
 
     function sortearPokemon() {
@@ -403,10 +398,33 @@ $(function () {
         }
     }
 
+    let timerAnimacaoJogador = null;
+
+    function animarArremesso(dir) {
+        const $jogador = $('#jogador');
+        const $sprite = $('#sprite-jogador');
+
+        // Espelha o sprite se atirar para a esquerda (dir === -1)
+        $jogador.toggleClass('virado', dir < 0);
+
+        clearTimeout(timerAnimacaoJogador);
+        $sprite.attr('src', 'imgs/personagem_levantar.png');
+
+        timerAnimacaoJogador = setTimeout(function () {
+            $sprite.attr('src', 'imgs/personagem_arremessar.png');
+
+            timerAnimacaoJogador = setTimeout(function () {
+                $sprite.attr('src', 'imgs/personagem_idle.png');
+            }, 140);
+        }, 70);
+    }
+
     function lancarBola(dir) {
         const agora = performance.now();
         if (agora - jogo.ultimoTiro < COOLDOWN_TIRO) return;
         jogo.ultimoTiro = agora;
+
+        animarArremesso(dir);
 
         const m = medidas();
         const $el = $('<div class="bola">')
@@ -682,6 +700,14 @@ $(function () {
     $('#btn-retomar').on('click', function () { this.blur(); retomarJogo(); });
     $('#btn-salvar').on('click', salvarPontuacao);
 
+    $('#jogo').on('touchstart mousedown', function (e) {
+        if (telaAtual !== 'jogo') return;
+        if ($(e.target).closest('.pause').length) return;
+        const clientX = e.type === 'touchstart' ? e.originalEvent.touches[0].clientX : e.clientX;
+        const dir = clientX < $(window).width() / 2 ? -1 : 1;
+        lancarBola(dir);
+    });
+
     $(document).on('keydown', function (e) {
         const k = e.key;
 
@@ -710,6 +736,5 @@ $(function () {
         }
     });
 
-    // começa na tela inicial
     mostrarTela('inicial');
 });
