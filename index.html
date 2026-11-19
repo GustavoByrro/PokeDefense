@@ -14,7 +14,11 @@
     <!-- Elementos de Áudio -->
     <audio id="audio-inicial" src="Músicas/TelaInicial_pokedefense.mpeg" loop preload="auto"></audio>
     <audio id="audio-batalha" src="Músicas/Batalha_pokedefense.mpeg" loop preload="auto"></audio>
-   
+  
+  <!-- O seu jogo fica aqui dentro -->
+  <div id="tela-jogo">
+    <!-- Canvas, botões, etc. -->
+  </div>
     <div class="tela" id="inicial">
         <h3 class="titulo">Poke Defense</h3>
         <button class="botao" id="btn-iniciar">Iniciar</button>
@@ -143,6 +147,11 @@
     <div class="transicao-metade topo"></div>
     <div class="transicao-metade baixo"></div>
 
+    <!-- Aviso que só aparece com o celular em pé -->
+<div id="aviso-girar">
+    <p>🔄 Vire o celular de lado para jogar!</p>
+  </div>
+  
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="js/principal.js"></script>
 </body>

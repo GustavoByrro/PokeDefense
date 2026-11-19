@@ -334,6 +334,7 @@ $(function () {
         }
     }
 
+    let pausadoPorOrientacao = false;
     function loop(agora) {
         if (!jogo.ativo) { loopRodando = false; return; }
         requestAnimationFrame(loop);
@@ -341,7 +342,7 @@ $(function () {
         const dt = Math.min((agora - jogo.ultimoFrame) / 1000, 0.05);
         jogo.ultimoFrame = agora;
 
-        if (telaAtual !== 'jogo') return; 
+        if (telaAtual !== 'jogo' || pausadoPorOrientacao) return; 
         atualizar(dt);
     }
 
@@ -815,8 +816,9 @@ $(function () {
 
     // pointerdown cobre mouse, toque e caneta num único evento. Antes, "touchstart mousedown"
     // disparava duas vezes num toque longo (o navegador emula o mouse ao soltar o dedo).
+
     $('#jogo').on('pointerdown', function (e) {
-        if (telaAtual !== 'jogo') return;
+        if (telaAtual !== 'jogo' || pausadoPorOrientacao) return;
         if ($(e.target).closest('.pause').length) return;
         if (e.originalEvent.button > 0) return;
         const area = this.getBoundingClientRect();
@@ -857,4 +859,23 @@ $(function () {
     });
 
     mostrarTela('inicial');
+
+    // Pausa o jogo se a tela estiver em pé no celular
+
+    function verificarOrientacao() {
+        
+        const ehCelular = window.matchMedia('(pointer: coarse)').matches;
+        const estaEmPe = window.innerHeight > window.innerWidth;
+
+        pausadoPorOrientacao = ehCelular && estaEmPe;
+
+        if (pausadoPorOrientacao) {
+            $('#aviso-girar').css('display', 'flex');
+        } else {
+            $('#aviso-girar').hide();
+        }
+    }
+
+    verificarOrientacao();
+    $(window).on('resize orientationchange', verificarOrientacao);
 });
