@@ -706,7 +706,7 @@ body {
     align-items: center;
     position: fixed;
     inset: 0;
-    background-color: rgba(26, 21, 0, 0.78);
+    background-color: rgba(4, 43, 88, 0.849);
     backdrop-filter: blur(4px);
     color: white;
     font-size: 20px;
@@ -717,7 +717,7 @@ body {
 
 #aviso-girar p {
     padding: 20px 16px;
-    background-color: #c20808;
+    background-color: #ffcc01d3;
     border: 4px solid white;
     border-radius: 20px;
 }
