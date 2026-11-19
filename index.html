@@ -26,7 +26,7 @@
         <button class="botao" data-tela="tutorial">Tutorial / Controles</button>
         <div class="controle-volume">
             <button class="btn-volume" id="btn-volume" type="button" data-volume-toggle aria-controls="painel-volume" aria-expanded="false">♫ Volume</button>
-            <button class="btn-mute" type="button" data-volume-mute aria-pressed="false">Mutar</button>
+            <button class="btn-mute" type="button" data-volume-mute aria-pressed="false">Mutar música</button>
             <div class="volume-painel" id="painel-volume" hidden>
                 <label for="volume-musica">Volume da música <output class="volume-valor" id="volume-valor" for="volume-musica">50%</output></label>
                 <input class="volume-slider" id="volume-musica" type="range" min="0" max="100" step="1" value="50">
@@ -64,20 +64,37 @@
                         <th>#</th>
                         <th>Jogador</th>
                         <th>Pontos</th>
-                        <th>Modo especial</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
         <button class="botao" id="btn-jogar-ranking">Jogar</button>
+        <button class="botao" data-tela="ranking-especial">Rankings especiais</button>
+    </div>
+
+    <div class="tela" id="ranking-especial">
+        <button class="voltar" data-tela="ranking">&lt;</button>
+        <h2>Rankings especiais</h2>
+        <div class="tabela-wrap tabela-ranking-unica">
+            <table id="tabela-ranking-especial">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jogador</th>
+                        <th>Pontos</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
  
     <div class="tela" id="tutorial">
         <button class="voltar" data-tela="inicial">&lt;</button>
         <h2>Como jogar</h2>
         <p>Pokémons selvagens vêm dos dois lados da tela em direção ao seu treinador. Capture todos com suas pokébolas antes que eles te alcancem!</p>
-        <p class="dica-toque">No celular ou tablet: toque na metade esquerda ou direita da tela para lançar a pokébola para aquele lado e use || para pausar.</p>
+        <p class="dica-toque">No celular ou tablet: toque na metade esquerda ou direita da tela para lançar a pokébola para aquele lado e use o botão || para pausar.</p>
         <ul>
             <li>← ou A: lança uma pokébola para a esquerda</li>
             <li>→ ou D: lança uma pokébola para a direita</li>

@@ -253,6 +253,7 @@ $(function () {
         $('#' + id).show();
         telaAtual = id;
         if (id === 'ranking') atualizarRanking();
+        if (id === 'ranking-especial') atualizarRankingEspecial();
         if (id === 'resultado' && !$('#nome').prop('hidden')) $('#nome').trigger('focus');
 
         if (id === 'jogo') {
@@ -755,51 +756,47 @@ $(function () {
 
     async function atualizarRanking() {
         const ranking = await carregarRankingGlobal();
-        const rankingEspecial = lerRankingEspecial();
         const $corpo = $('#tabela-ranking tbody').empty();
-        const jogadoresPorNome = new Map();
-
-        for (const jogador of ranking) {
-            const chave = normalizarNomeRanking(jogador.nome);
-            const especial = rankingEspecial[chave];
-            jogadoresPorNome.set(chave, {
-                nome: jogador.nome,
-                pontos: jogador.pontos,
-                pontosEspeciais: especial ? Number(especial.pontuacao) : null
-            });
-        }
-
-        for (const [chave, especial] of Object.entries(rankingEspecial)) {
-            if (!jogadoresPorNome.has(chave)) {
-                jogadoresPorNome.set(chave, {
-                    nome: especial.nome,
-                    pontos: null,
-                    pontosEspeciais: Number(especial.pontuacao)
-                });
-            }
-        }
-
-        const jogadores = Array.from(jogadoresPorNome.values()).sort(function (a, b) {
-            if (a.pontos != null && b.pontos != null) return b.pontos - a.pontos;
-            if (a.pontos != null) return -1;
-            if (b.pontos != null) return 1;
-            return b.pontosEspeciais - a.pontosEspeciais;
-        });
-
-        const top10 = jogadores.slice(0, 10);
+        const top10 = ranking.slice(0, 10);
         for (let i = 0; i < top10.length; i++) {
             const jogador = top10[i];
             const $tr = $('<tr>');
 
             $tr.append($('<td>').text(i + 1 + 'º'));
             $tr.append($('<td>').text(jogador.nome));
-            $tr.append($('<td>').text(jogador.pontos ?? '—'));
-            $tr.append($('<td>').text(jogador.pontosEspeciais ?? '—'));
+            $tr.append($('<td>').text(jogador.pontos));
             $corpo.append($tr);
         }
 
-        if (jogadores.length === 0) {
-            $corpo.append('<tr><td class="vazio" colspan="4">Nenhum recorde ainda!</td></tr>');
+        if (ranking.length === 0) {
+            $corpo.append('<tr><td class="vazio" colspan="3">Nenhum recorde ainda!</td></tr>');
+        }
+    }
+
+    function atualizarRankingEspecial() {
+        const ranking = Object.values(lerRankingEspecial())
+            .map(function (jogador) {
+                return {
+                    nome: String(jogador.nome || 'Jogador'),
+                    pontos: Number(jogador.pontuacao) || 0
+                };
+            })
+            .sort(function (a, b) {
+                return b.pontos - a.pontos;
+            });
+        const $corpo = $('#tabela-ranking-especial tbody').empty();
+
+        for (let i = 0; i < ranking.length; i++) {
+            const jogador = ranking[i];
+            const $tr = $('<tr>');
+            $tr.append($('<td>').text(i + 1 + 'º'));
+            $tr.append($('<td>').text(jogador.nome));
+            $tr.append($('<td>').text(jogador.pontos));
+            $corpo.append($tr);
+        }
+
+        if (ranking.length === 0) {
+            $corpo.append('<tr><td class="vazio" colspan="3">Nenhum recorde especial ainda!</td></tr>');
         }
     }
 
@@ -841,6 +838,7 @@ $(function () {
         if (k === 'Escape') {
             if (telaAtual === 'jogo') mudarTela('pausa');
             else if (telaAtual === 'ranking' || telaAtual === 'tutorial' || telaAtual === 'creditos') mudarTela('inicial');
+            else if (telaAtual === 'ranking-especial') mudarTela('ranking');
             else if (telaAtual === 'pausa') { e.preventDefault(); encerrarJogoPausado(); }
             return;
         }

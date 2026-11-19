@@ -24,6 +24,7 @@ body {
 .tela {
     display: none;
     position: relative;
+    z-index: 2;
     height: 100vh;
     height: 100dvh;   /* altura real da janela, descontando a barra do navegador no celular */
     box-sizing: border-box;
@@ -35,8 +36,35 @@ body {
     overflow: hidden;
 }
 
+#pokemon-ambiente {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.pokemon-ambiente {
+    position: absolute;
+    left: 0;
+    height: auto;
+    object-fit: contain;
+    opacity: 0.48;
+    image-rendering: pixelated;
+    animation: pokemonAmbientePassando 22s linear forwards;
+}
+
+.pokemon-ambiente.reverso {
+    animation-direction: reverse;
+}
+
+@keyframes pokemonAmbientePassando {
+    from { transform: translateX(-120%); }
+    to { transform: translateX(calc(100vw + 120%)); }
+}
+
 #inicial { display: block; }
-#ranking, #tutorial, #creditos { overflow-y: auto; }
+#ranking, #ranking-especial, #tutorial, #creditos { overflow-y: auto; }
 #inicial, #pausa, #resultado {
     overflow-x: hidden;
     overflow-y: auto;      /* se o menu não couber (celular deitado), rola em vez de cortar */
@@ -55,6 +83,10 @@ body {
     position: fixed;
     top: calc(15px + env(safe-area-inset-top, 0px));
     left: calc(15px + env(safe-area-inset-left, 0px));
+}
+
+body::-webkit-scrollbar { 
+    display: none;
 }
 
 .titulo {
@@ -136,7 +168,7 @@ body {
     -webkit-touch-callout: none;
 }
 
-.dica-toque { display: none; }
+
 @media (hover: none) {
     #tutorial .dica-toque { display: block; }
 }
@@ -145,6 +177,7 @@ body {
 .voltar { left: calc(15px + env(safe-area-inset-left, 0px)); }
 
 #ranking h2,
+#ranking-especial h2,
 #tutorial h2,
 #creditos h2,
 #resultado h2 {
@@ -211,14 +244,16 @@ body {
     display: none;
 }
 
-#tabela-ranking {
+#tabela-ranking,
+#tabela-ranking-especial {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     color: #2b1a4a;
 }
 
-#tabela-ranking th {
+#tabela-ranking th,
+#tabela-ranking-especial th {
     position: sticky;
     top: 0;
     z-index: 2;
@@ -229,33 +264,101 @@ body {
     border-bottom: 4px solid #1f2a6b;
 }
 
-#tabela-ranking td {
+#tabela-ranking td,
+#tabela-ranking-especial td {
     padding: 14px 10px;
     border-bottom: 2px dashed rgba(139, 69, 19, 0.35);
 }
 
-#tabela-ranking tbody tr:nth-child(even) {
+#tabela-ranking tbody tr:nth-child(even),
+#tabela-ranking-especial tbody tr:nth-child(even) {
     background-color: rgba(250, 230, 120, 0.35);
 }
 @media (hover: hover) {
-    #tabela-ranking tbody tr:hover {
+    #tabela-ranking tbody tr:hover,
+    #tabela-ranking-especial tbody tr:hover {
         background-color: rgba(255, 205, 1, 0.45);
     }
 }
 
-#tabela-ranking td:nth-child(1) { width: 12%; font-weight: bold; }
-#tabela-ranking td:nth-child(2) { text-align: left; padding-left: 16px; word-break: break-word; }
-#tabela-ranking td:nth-child(3) { width: 22%; color: #b3261e; font-weight: bold; }
-#tabela-ranking td:nth-child(4) { width: 24%; color: #6b21a8; }
+#tabela-ranking td:nth-child(1),
+#tabela-ranking-especial td:nth-child(1) { width: 12%; font-weight: bold; }
+#tabela-ranking td:nth-child(2),
+#tabela-ranking-especial td:nth-child(2) { word-break: break-word; }
+#tabela-ranking td:nth-child(2) { text-align: center; }
+#tabela-ranking-especial td:nth-child(2) { text-align: left; padding-left: 16px; }
+#tabela-ranking td:nth-child(3),
+#tabela-ranking-especial td:nth-child(3) { width: 22%; color: #b3261e; font-weight: bold; }
 
-#tabela-ranking tbody tr:nth-child(1) td { background-color: rgba(255, 224, 102, 0.75); }
-#tabela-ranking tbody tr:nth-child(2) td { background-color: rgba(223, 228, 234, 0.75); }
-#tabela-ranking tbody tr:nth-child(3) td { background-color: rgba(232, 185, 138, 0.75); }
+#tabela-ranking tbody tr:nth-child(1) td,
+#tabela-ranking-especial tbody tr:nth-child(1) td { background-color: rgba(255, 224, 102, 0.75); }
+#tabela-ranking tbody tr:nth-child(2) td,
+#tabela-ranking-especial tbody tr:nth-child(2) td { background-color: rgba(223, 228, 234, 0.75); }
+#tabela-ranking tbody tr:nth-child(3) td,
+#tabela-ranking-especial tbody tr:nth-child(3) td { background-color: rgba(232, 185, 138, 0.75); }
 
-#tabela-ranking td.vazio {
+#tabela-ranking td.vazio,
+#tabela-ranking-especial td.vazio {
     padding: 30px;
     color: #6b5a8a;
     text-align: center;
+}
+
+#ranking-especial .tabela-wrap {
+    background-color: rgba(250, 245, 255, 0.96);
+    border-color: #6b21a8;
+    box-shadow: 0 6px 0 #3b0764;
+}
+
+#ranking .tabela-ranking-unica,
+#ranking-especial .tabela-ranking-unica {
+    width: 75%;
+    max-width: 560px;
+}
+
+#tabela-ranking-especial {
+    color: #3b0764;
+}
+
+#tabela-ranking-especial th {
+    color: #f3e8ff;
+    text-shadow: 2px 2px 0 #3b0764;
+    background-color: #7e22ce;
+    border-bottom-color: #3b0764;
+}
+
+#tabela-ranking-especial td {
+    border-bottom-color: rgba(107, 33, 168, 0.28);
+}
+
+#tabela-ranking-especial tbody tr:nth-child(even) {
+    background-color: rgba(216, 180, 254, 0.22);
+}
+
+@media (hover: hover) {
+    #tabela-ranking-especial tbody tr:hover {
+        background-color: rgba(192, 132, 252, 0.35);
+    }
+}
+
+#tabela-ranking-especial td:nth-child(3) {
+    color: #6b21a8;
+}
+
+#tabela-ranking-especial tbody tr:nth-child(1) td {
+    background-color: rgba(216, 180, 254, 0.65);
+}
+
+#tabela-ranking-especial tbody tr:nth-child(2) td {
+    background-color: rgba(233, 213, 255, 0.75);
+}
+
+#tabela-ranking-especial tbody tr:nth-child(3) td {
+    background-color: rgba(192, 132, 252, 0.28);
+}
+
+#tabela-ranking-especial td.vazio {
+    color: #6b21a8;
 }
 
 #resultado #nome {
@@ -583,8 +686,8 @@ body {
 @media (max-width: 768px) {
     .titulo { font-size: 54px; margin-bottom: 36px; }
     .botao { font-size: 22px; padding: 15px 10px; }
-    #tabela-ranking { font-size: 12px; }
-    #tabela-ranking th, #tabela-ranking td { padding: 12px 6px; }
+    #tabela-ranking, #tabela-ranking-especial { font-size: 12px; }
+    #tabela-ranking th, #tabela-ranking td, #tabela-ranking-especial th, #tabela-ranking-especial td { padding: 12px 6px; }
 }
 
 @media (max-width: 600px) {
@@ -604,7 +707,8 @@ body {
 
     :root { --tam-pokemon: 90px; --tam-jogador: 84px; --tam-bola: 26px; }
 
-    #ranking h2, #tutorial h2, #creditos h2, #resultado h2 { font-size: 20px; }
+    #ranking h2, #ranking-especial h2, #tutorial h2, #creditos h2, #resultado h2 { font-size: 20px; }
+    #ranking .tabela-ranking-unica, #ranking-especial .tabela-ranking-unica { width: 95%; }
     #tutorial p, #tutorial ul { font-size: 12px; padding: 14px 16px; }
     #tutorial ul { padding-left: 34px; }
     #tutorial .lista-pokemons { padding: 10px 14px; }
@@ -617,9 +721,9 @@ body {
     .btn-volume { font-size: 12px; padding: 8px 12px; }
     .controle-volume .btn-mute { font-size: 10px; padding: 8px 10px; }
 
-    #tabela-ranking { font-size: 10px; }
-    #tabela-ranking th, #tabela-ranking td { padding: 10px 4px; }
-    #tabela-ranking td:nth-child(2) { padding-left: 8px; }
+    #tabela-ranking, #tabela-ranking-especial { font-size: 10px; }
+    #tabela-ranking th, #tabela-ranking td, #tabela-ranking-especial th, #tabela-ranking-especial td { padding: 10px 4px; }
+    #tabela-ranking-especial td:nth-child(2) { padding-left: 8px; }
     #resultado #nome { font-size: 16px; padding: 14px 10px; }
 }
 
@@ -647,7 +751,7 @@ body {
     }
     .volume-pausa { margin: 10px auto; }
 
-    #ranking h2, #tutorial h2, #creditos h2, #resultado h2 { font-size: 20px; margin: 4px 0 10px; }
+    #ranking h2, #ranking-especial h2, #tutorial h2, #creditos h2, #resultado h2 { font-size: 20px; margin: 4px 0 10px; }
     #resultado #nome { margin: 12px auto 6px; padding: 10px; font-size: 16px; }
     .tabela-wrap { max-height: 50dvh; }
     #hud { gap: 8px; }
